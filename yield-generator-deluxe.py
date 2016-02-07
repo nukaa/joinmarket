@@ -59,6 +59,10 @@ num_offers = random.randrange(6, 9)  # varied
 #num_offers = 8 
 #num_offers = mix_levels
 
+# When the bot reconnects, generate a new set of orders
+# False will keep the old set
+onconnect_offers = True
+
 # only create change greater than this amount
 min_output_size = random.randrange(15000, 300000)  # varied
 #min_output_size = random.randrange(5e6, 21e6)  # varied
@@ -147,6 +151,8 @@ class YieldGenerator(Maker):
         self.income_statement.close()
 
     def on_welcome(self):
+        if onconnect_offers:
+            self.orderlist = self.create_my_orders()
         Maker.on_welcome(self)
         if not os.path.isfile(self.statement_file):
             self.log_statement(

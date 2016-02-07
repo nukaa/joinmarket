@@ -454,6 +454,7 @@ class BitcoinCoreNotifyThread(threading.Thread):
     def __init__(self, btcinterface):
         threading.Thread.__init__(self)
         self.daemon = True
+        self.running = threading.Event()
         self.btcinterface = btcinterface
 
     def run(self):
@@ -473,6 +474,7 @@ class BitcoinCoreNotifyThread(threading.Thread):
             httpd.btcinterface = self.btcinterface
             log.debug('started bitcoin core notify listening thread, host=' +
                       str(notify_host) + ' port=' + str(hostport[1]))
+            self.running.set()
             httpd.serve_forever()
         log.debug('failed to bind for bitcoin core notify listening')
 
@@ -641,6 +643,7 @@ class BitcoinCoreInterface(BlockchainInterface):
         if not self.notifythread:
             self.notifythread = BitcoinCoreNotifyThread(self)
             self.notifythread.start()
+        self.notifythread.running.wait()
         one_addr_imported = False
         for outs in txd['outs']:
             addr = btc.script_to_address(outs['script'], get_p2pk_vbyte())

@@ -116,11 +116,16 @@ socks5 = false
 socks5_host = localhost
 socks5_port = 9050
 #for tor
-#host = 6dvj6v5imhny3anf.onion
+#newnym = true
+#newnym_delay = 60
+#tor_host = localhost
+#tor_port = 9051
+#tor_pass =
 #port = 6697
 #usessl = true
 #socks5 = true
 maker_timeout_sec = 30
+reconnect_delay = 30
 
 [POLICY]
 # for dust sweeping, try merge_algorithm = gradual
